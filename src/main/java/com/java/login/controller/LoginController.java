@@ -2,6 +2,7 @@ package com.java.login.controller;
 
 import com.java.login.repository.LoginRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,20 +15,20 @@ public class LoginController {
     LoginRepository loginRepository;
 
     @PostMapping
-    public String getAuthenticated(@RequestParam("user") String user, @RequestParam("password") String password){
+    public ResponseEntity getAuthenticated(@RequestParam("user") String user, @RequestParam("password") String password) {
         if(loginRepository.existUser(user,password)){
-            return "Valid";
+            return ResponseEntity.ok().build();
         }
-        return "Invalid";
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("save")
-    public String registeruser(@RequestParam("user") String user, @RequestParam("password") String password){
+    public ResponseEntity registeruser(@RequestParam("user") String user, @RequestParam("password") String password) {
         if(loginRepository.existUser(user,password)){
-            return "Already Existing user";
+            return ResponseEntity.badRequest().build();
         }
         loginRepository.saveUser(user,password);
-        return "saved";
+        return ResponseEntity.accepted().build();
     }
 
 }
