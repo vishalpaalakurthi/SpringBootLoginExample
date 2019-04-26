@@ -14,28 +14,28 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.logging.Logger;
 
 @RestController
-@RequestMapping("login")
+@RequestMapping("user")
 public class LoginController {
 
-    static final Log LOG = LogFactory.getLog(LoginController.class);
+    private static final Log LOG = LogFactory.getLog(LoginController.class);
 
     @Autowired
-    LoginRepository loginRepository;
+    private LoginRepository loginRepository;
 
     @Autowired
-    EncrypterDecrypterService encrypterDecrypterService;
+    private EncrypterDecrypterService encrypterDecrypterService;
 
-    @PostMapping
+    @PostMapping("authenticate")
     public ResponseEntity getAuthenticated(@RequestParam("user") String user, @RequestParam("password") String password) {
-        if(loginRepository.existUser(user,password)){
+        if (loginRepository.existUser(user, encrypterDecrypterService.encryptString(password))) {
             return ResponseEntity.ok(String.format("%s found", user));
         }
         return ResponseEntity.badRequest().build();
     }
 
-    @PostMapping("save")
+    @PostMapping("register")
     public ResponseEntity registeruser(@RequestParam("user") String user, @RequestParam("password") String password) {
-        if(loginRepository.existUser(user,password)){
+        if (loginRepository.existUser(user, encrypterDecrypterService.encryptString(password))) {
             return ResponseEntity.badRequest().build();
         }
         LOG.info("Saving User details");

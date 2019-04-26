@@ -13,16 +13,16 @@ import java.util.List;
 @Transactional
 public class LoginRepository {
     @Autowired
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Autowired
-    EncrypterDecrypterService encrypterDecrypterService;
+    private EncrypterDecrypterService encrypterDecrypterService;
 
     public boolean existUser(String userName,String password){
 
         List<?> user = entityManager.createQuery("select account from User account where userName = :name and password = :password")
                 .setParameter("name",userName)
-                .setParameter("password", encrypterDecrypterService.encryptString(password))
+                .setParameter("password", password)
                 .getResultList();
 
         return user != null && !user.isEmpty();
