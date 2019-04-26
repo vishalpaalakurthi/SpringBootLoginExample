@@ -34,4 +34,10 @@ public class LoginRepository {
     }
 
 
+    public void updatePassword(String user, String pass) {
+        entityManager.createQuery("update User set password = :newPass where userName = :name")
+                .setParameter("name", user)
+                .setParameter("newPass", pass)
+                .executeUpdate();
+    }
 }
