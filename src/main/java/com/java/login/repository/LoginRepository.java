@@ -1,6 +1,7 @@
 package com.java.login.repository;
 
 import com.java.login.entities.User;
+import com.java.login.service.EncrypterDecrypterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -14,11 +15,14 @@ public class LoginRepository {
     @Autowired
     EntityManager entityManager;
 
+    @Autowired
+    EncrypterDecrypterService encrypterDecrypterService;
+
     public boolean existUser(String userName,String password){
 
         List<?> user = entityManager.createQuery("select account from User account where userName = :name and password = :password")
                 .setParameter("name",userName)
-                .setParameter("password",password)
+                .setParameter("password", encrypterDecrypterService.encryptString(password))
                 .getResultList();
 
         return user != null && !user.isEmpty();
