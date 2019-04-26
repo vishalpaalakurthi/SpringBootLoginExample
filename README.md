@@ -8,6 +8,7 @@
 
 Required softwares
 ---------------
-java8
-any java ide
-mysql
+1. java8
+2. any java ide
+3. mysql
+4. maven build tool
